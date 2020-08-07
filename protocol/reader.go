@@ -4,57 +4,56 @@ import (
 	"bufio"
 	"fmt"
 	"io"
+	"strings"
 )
 
-type CmdReader struct {
+// 读指令者
+type TCmdReader struct {
 	reader *bufio.Reader
 }
 
-func NewCmdReader(r io.Reader) *CmdReader {
-	return &CmdReader{
+// 构造函数
+func NewCmdReader(r io.Reader) *TCmdReader {
+	return &TCmdReader{
 		reader: bufio.NewReader(r),
 	}
 }
 
 // 读消息
-func (r *CmdReader) Read() (interface{}, error) {
-	cmdName, err := r.reader.ReadString(' ') // 这里不能用""，字符用''，字符串用""
+func (r *TCmdReader) Read() (string, error) {
+	strCmd, err := r.reader.ReadString(' ')
+	cmdName := strings.TrimSpace(strCmd)
 	if err != nil {
-		return nil, err
+		return "", err
+	}
+	if strCmd == "" {
+		return "", nil
 	}
 	switch cmdName {
 	case "MESSAGE":
 		user, err := r.reader.ReadString(' ')
 		if err != nil {
-			return nil, err
+			return "", err
 		}
 		msg, err := r.reader.ReadString('\n')
 		if err != nil {
-			return nil, err
+			return "", err
 		}
-		// 构造消息
-		return SCS_CmdMessage{
-			user[:len(user)-1],
-			msg[:len(msg)-1],
-		}, nil
+		return cmdName + user + msg, nil
 	case "SEND":
 		msg, err := r.reader.ReadString('\n')
 		if err != nil {
-			return nil, err
+			return "", err
 		}
-		return CS_CmdSend{
-			Msg: msg[:len(msg)-1],
-		}, nil
+		return cmdName + " " + msg, nil
 	case "NAME":
 		name, err := r.reader.ReadString('\n')
 		if err != nil {
-			return nil, err
+			return "", err
 		}
-		return CS_CmdName{
-			Name: name[:len(name)-1],
-		}, nil
+		return cmdName + name, nil
 	default:
 		fmt.Printf("未知的指令类型 %s", cmdName)
-		return nil, err
+		return "", err
 	}
 }

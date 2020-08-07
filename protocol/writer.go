@@ -3,36 +3,41 @@ package protocol
 import (
 	"fmt"
 	"io"
+	"strings"
 )
 
-type CmdWriter struct {
+// 指令写者（负责套接字发送）
+type TCmdWriter struct {
 	writer io.Writer
 }
 
 // 构造指令写者
-func NewCmdWriter(writer io.Writer) *CmdWriter {
-	return &CmdWriter{
+func NewCmdWriter(writer io.Writer) *TCmdWriter {
+	return &TCmdWriter{
 		writer: writer,
 	}
 }
 
-// 写字符串
-func (w *CmdWriter) writeStr(msg string) error {
+// 内部方法
+// 写字节（实际通过套接口发送字节流）
+func (w *TCmdWriter) writeStr(msg string) error {
 	_, err := w.writer.Write([]byte(msg))
 	return err
 }
 
-func (w *CmdWriter) Write(cmd interface{}) error {
+// 根据指令类型打包消息并发送
+func (w *TCmdWriter) Write(cmd string) error {
+	slcCmd := strings.Split(cmd, " ")
 	var err error
-	switch msg := cmd.(type) {
-	case CS_CmdSend: // 客户端发消息，就是往聊天框发送消息
-		err = w.writeStr(fmt.Sprintf("SEND %v\n", msg.Msg))
-	case SCS_CmdMessage: // 服务器广播消息
-		err = w.writeStr(fmt.Sprintf("MESSAGE %v %v \n", msg.Name, msg.Msg))
-	case CS_CmdName: // 客户端设置名称，以区分不同的聊天者
-		err = w.writeStr(fmt.Sprintf("NAME %v\n", msg.Name))
+	switch slcCmd[0] {
+	case "SEND": // 客户端发消息，就是往聊天框发送消息
+		err = w.writeStr(fmt.Sprintf("SEND %v\n", slcCmd[1]))
+	case "MESSAGE": // 服务器广播消息
+		err = w.writeStr(fmt.Sprintf("MESSAGE %v %v \n", slcCmd[1], slcCmd[2]))
+	case "NAME": // 客户端设置名称，以区分不同的聊天者
+		err = w.writeStr(fmt.Sprintf("NAME %v\n", slcCmd[1]))
 	default:
-		fmt.Print("未知的消息类型")
+		fmt.Println("未知的消息类型")
 	}
 	return err
 }

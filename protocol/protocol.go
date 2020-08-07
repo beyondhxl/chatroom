@@ -11,7 +11,7 @@
 
 模仿 Redis 设计消息指令，以 \n 做结束符
 发送指令（SEND）：客户端可以发送聊天消息
-命名指令（Name）：客户端设置用户名
+命名指令（NAME）：客户端设置用户名
 消息指令（MESSAGE）：服务端广播聊天消息给其他用户
 
 例如，要发送一个 “Hello” 的消息，客户端会将字符串 SEND Hello\n 提交给 TCP socket，
@@ -20,21 +20,18 @@
 
 package protocol
 
-// CS_CmdSend is used for sending new message from client
-// C -> S
+// C -> S 客户端到服务器发送消息
 type CS_CmdSend struct {
-	Msg string
+	Msg string // 消息
 }
 
-// CS_CmdName is used for setting client display name
 // C -> S
 type CS_CmdName struct {
-	Name string
+	Name string // 客户端要设置的名字
 }
 
-// SC_CmdMessage is used for notifying new messages
-// S -> C || C -> S
+// S -> C || C -> S （服务器收到客户端的消息，然后广播给其他客户端）
 type SCS_CmdMessage struct {
-	Name string
-	Msg  string
+	Name string // 名字
+	Msg  string // 具体消息
 }

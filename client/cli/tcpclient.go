@@ -1,79 +1,84 @@
 package cli
 
 import (
-	"fmt"
-	"io"
-	"net"
-
+	"chatroom/common"
 	"chatroom/protocol"
+	"fmt"
+	"net"
 )
 
-// 实际的 TcpChatClient
-type TcpChatClient struct {
-	conn      net.Conn                     // 实际的网络连接
-	cmdReader *protocol.CmdReader          // 指令读者
-	cmdWriter *protocol.CmdWriter          // 指令写者
-	name      string                       // 客户端名称
-	msgChan   chan protocol.SCS_CmdMessage // 消息通道缓存
+// 实际的 TCPChatClient
+type TTCPChatClient struct {
+	conn    net.Conn             // 实际的网络连接
+	strName string               // 客户端名称
+	tReader *protocol.TCmdReader // 读指令器
+	tWriter *protocol.TCmdWriter // 写指令器
 }
 
-func NewTcpChatClient() *TcpChatClient {
-	return &TcpChatClient{
-		msgChan: make(chan protocol.SCS_CmdMessage),
-	}
+// 构造聊天客户端
+func NewTCPChatClient() *TTCPChatClient {
+	return &TTCPChatClient{}
 }
 
 // 实现 IClient Dial() 接口
-func (this *TcpChatClient) Dial(addr string) error {
+func (this *TTCPChatClient) Dial(addr string) error {
 	conn, err := net.Dial("tcp", addr)
 	if err != nil {
 		return err
 	}
-	this.conn = conn // 保存客户端连接
-	this.cmdReader = protocol.NewCmdReader(conn)
-	this.cmdWriter = protocol.NewCmdWriter(conn)
+	this.conn = conn                           // 保存客户端连接
+	this.tWriter = protocol.NewCmdWriter(conn) // 构造读写器
+	this.tReader = protocol.NewCmdReader(conn)
 	return err
 }
 
-// 实现 IClient Send() 接口
-func (this *TcpChatClient) Send(cmd interface{}) error {
-	return this.cmdWriter.Write(cmd)
-}
-
 // 实现 IClient Start() 接口
-func (this *TcpChatClient) Start() {
-	// 也是需要一直循环侦听客户端发来的消息
+func (this *TTCPChatClient) Start() {
+	// 启动消息循环 goroutine
+	go this.recvLoop()
+
+	// 发送消息循环
 	for {
-		msg, err := this.cmdReader.Read()
-		if err == io.EOF {
-			break // 读到文件尾了
-		} else {
-			fmt.Print("111")
-			fmt.Print(err)
-		}
-		if msg != nil {
-			switch cmd := msg.(type) {
-			case protocol.SCS_CmdMessage:
-				this.msgChan <- cmd // 指令缓存到消息队列里
-			default:
-				fmt.Printf("未知的消息类型 %s", cmd)
-			}
-		}
+		message := common.ScanLine() // 从命令行获取用户输入
+		// 消息格式
+		// MESSAGE username msg\n
+		// SEND msg\n
+		// NAME username\n
+		this.tWriter.Write(message)
+
+		/*
+			this.Send(message) // 发送消息
+		*/
 	}
+
 }
 
 // 实现 IClient Close() 接口
-func (this *TcpChatClient) Close() {
-	close(this.msgChan)
+func (this *TTCPChatClient) Close() {
 	this.conn.Close()
 }
 
-// 实现 IClient SendMessag() 接口 直接往服务器发指令
-func (this *TcpChatClient) SendMessag(message string) error {
-	return this.Send(protocol.SCS_CmdMessage{Msg: message})
+// 实现 IClient SetName() 接口
+func (this *TTCPChatClient) SetName(name string) {
+	this.strName = name
 }
 
-// 实现 IClient SetName() 接口 直接往服务器发指令
-func (this *TcpChatClient) SetName(name string) error {
-	return this.Send(protocol.CS_CmdName{Name: name})
+// 实现 IClient Send() 接口
+func (this *TTCPChatClient) Send(message string) {
+	this.conn.Write([]byte(message))
+}
+
+// 接收循环
+func (this *TTCPChatClient) recvLoop() {
+	// 也是需要一直循环侦听服务端发来的消息
+	for {
+		/*
+			data := make([]byte, 1024)
+			//读取消息
+			this.conn.Read(data)
+			fmt.Println(string(data))
+		*/
+		msg, _ := this.tReader.Read()
+		fmt.Println(msg)
+	}
 }
