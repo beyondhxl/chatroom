@@ -5,6 +5,7 @@ import (
 	"chatroom/protocol"
 	"fmt"
 	"net"
+	"strings"
 	"sync"
 )
 
@@ -17,9 +18,10 @@ type TTCPChatServer struct {
 
 // TCPChatServer 上的客户端，并非实际的客户端，方便管理
 type TClient struct {
-	conn    net.Conn             // 原生连接
-	strName string               // 聊天者名字
-	tWriter *protocol.TCmdWriter // 写指令器
+	conn     net.Conn             // 原生连接
+	strName  string               // 聊天者名字
+	ptWriter *protocol.TCmdWriter // 写指令器
+	ptReader *protocol.TCmdReader // 读指令器
 }
 
 func NewTcpChatServer() *TTCPChatServer {
@@ -76,9 +78,10 @@ func (this *TTCPChatServer) accept(conn net.Conn) *TClient {
 	this.tMutex.Lock()
 	defer this.tMutex.Unlock()
 	client := &TClient{
-		conn:    conn,
-		strName: "",
-		tWriter: protocol.NewCmdWriter(conn),
+		conn:     conn,
+		strName:  "",
+		ptWriter: protocol.NewCmdWriter(conn),
+		ptReader: protocol.NewCmdReader(conn),
 	}
 	this.slcClients = append(this.slcClients, client)
 	return client
@@ -100,15 +103,30 @@ func (this *TTCPChatServer) remove(client *TClient) {
 // 内部方法 读消息循环
 func (this *TTCPChatServer) recvLoop(client *TClient) {
 	for {
+		/*
+			data := make([]byte, 1024)
+			//读取消息
+			client.conn.Read(data)
 
-		data := make([]byte, 1024)
-		//读取消息
-		client.conn.Read(data)
-
-		fmt.Println(string(data))
-
-		// 广播
-		this.Broadcast(string(data))
+			fmt.Println(string(data))
+		*/
+		if client == nil || client.ptReader == nil {
+			return
+		}
+		msg, err := client.ptReader.Read()
+		if err != nil {
+			continue
+		}
+		if strings.Contains(msg, "NAME") {
+			client.strName = msg[4 : len(msg)-1]
+		} else if strings.Contains(msg, "MESSAGE") {
+			slcStr := strings.Split(msg, " ")
+			this.SendClient(slcStr[1], msg)
+		} else {
+			// 广播
+			this.Broadcast(msg)
+		}
+		fmt.Println(msg)
 	}
 }
 
@@ -128,6 +146,14 @@ func (this *TTCPChatServer) Broadcast(message string) {
 		/*
 			client.conn.Write([]byte(message))
 		*/
-		client.tWriter.Write(message)
+		client.ptWriter.Write(message)
+	}
+}
+
+func (this *TTCPChatServer) SendClient(clientName, message string) {
+	for _, client := range this.slcClients {
+		if client.strName == clientName {
+			client.ptWriter.Write(message)
+		}
 	}
 }

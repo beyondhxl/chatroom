@@ -44,7 +44,7 @@
       <recent name="D:\GoGo\chatroom\server\srv" />
     </key>
   </component>
-  <component name="RunManager" selected="Go Build.go build chatroom/client">
+  <component name="RunManager" selected="Go Build.go build chatroom/server">
     <configuration name="go build chatroom/client" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
       <module name="chatroom" />
       <working_directory value="$PROJECT_DIR$" />
@@ -52,6 +52,7 @@
       <filePath value="$PROJECT_DIR$/client/main.go" />
       <package value="chatroom/client" />
       <directory value="$PROJECT_DIR$" />
+      <output_directory value="$PROJECT_DIR$" />
       <method v="2" />
     </configuration>
     <configuration name="go build chatroom/server" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
@@ -61,12 +62,17 @@
       <filePath value="$PROJECT_DIR$/server/main.go" />
       <package value="chatroom/server" />
       <directory value="$PROJECT_DIR$" />
+      <output_directory value="$PROJECT_DIR$" />
       <method v="2" />
     </configuration>
+    <list>
+      <item itemvalue="Go Build.go build chatroom/client" />
+      <item itemvalue="Go Build.go build chatroom/server" />
+    </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Go Build.go build chatroom/client" />
         <item itemvalue="Go Build.go build chatroom/server" />
+        <item itemvalue="Go Build.go build chatroom/client" />
       </list>
     </recent_temporary>
   </component>
@@ -82,6 +88,10 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="561" y="246" key="#Go_Modules/0.0.1536.824@0.0.1536.824" timestamp="1596525264877" />
+    <state x="223" y="67" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1596767973664">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="223" y="67" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.824@0.0.1536.824" timestamp="1596767973664" />
     <state x="425" y="189" key="EditFileWatcherDialog" timestamp="1596518906420">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -90,62 +100,58 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="656" y="272" key="EnvironmentVariablesDialog/0.0.1536.824@0.0.1536.824" timestamp="1596525263835" />
-    <state x="549" y="167" key="FileChooserDialogImpl" timestamp="1596793347141">
+    <state x="549" y="167" key="FileChooserDialogImpl" timestamp="1596767970884">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="549" y="167" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1596793347141" />
-    <state width="1493" height="210" key="GridCell.Tab.0.bottom" timestamp="1596804894781">
+    <state x="549" y="167" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1596767970884" />
+    <state width="1493" height="261" key="GridCell.Tab.0.bottom" timestamp="1596892936892">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="210" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1596804894781" />
-    <state width="1493" height="210" key="GridCell.Tab.0.center" timestamp="1596804894781">
+    <state width="1493" height="261" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1596892936892" />
+    <state width="1493" height="261" key="GridCell.Tab.0.center" timestamp="1596892936892">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="210" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1596804894781" />
-    <state width="1493" height="210" key="GridCell.Tab.0.left" timestamp="1596804894780">
+    <state width="1493" height="261" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1596892936892" />
+    <state width="1493" height="261" key="GridCell.Tab.0.left" timestamp="1596892936892">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="210" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1596804894780" />
-    <state width="1493" height="210" key="GridCell.Tab.0.right" timestamp="1596804894781">
+    <state width="1493" height="261" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1596892936892" />
+    <state width="1493" height="261" key="GridCell.Tab.0.right" timestamp="1596892936892">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="210" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1596804894781" />
-    <state width="1493" height="261" key="GridCell.Tab.1.bottom" timestamp="1596804624343">
+    <state width="1493" height="261" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1596892936892" />
+    <state width="1493" height="261" key="GridCell.Tab.1.bottom" timestamp="1596892967443">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="261" key="GridCell.Tab.1.bottom/0.0.1536.824@0.0.1536.824" timestamp="1596804624343" />
-    <state width="1493" height="261" key="GridCell.Tab.1.center" timestamp="1596804624343">
+    <state width="1493" height="261" key="GridCell.Tab.1.bottom/0.0.1536.824@0.0.1536.824" timestamp="1596892967443" />
+    <state width="1493" height="261" key="GridCell.Tab.1.center" timestamp="1596892967442">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="261" key="GridCell.Tab.1.center/0.0.1536.824@0.0.1536.824" timestamp="1596804624343" />
-    <state width="1493" height="261" key="GridCell.Tab.1.left" timestamp="1596804624343">
+    <state width="1493" height="261" key="GridCell.Tab.1.center/0.0.1536.824@0.0.1536.824" timestamp="1596892967442" />
+    <state width="1493" height="261" key="GridCell.Tab.1.left" timestamp="1596892967442">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="261" key="GridCell.Tab.1.left/0.0.1536.824@0.0.1536.824" timestamp="1596804624343" />
-    <state width="1493" height="261" key="GridCell.Tab.1.right" timestamp="1596804624343">
+    <state width="1493" height="261" key="GridCell.Tab.1.left/0.0.1536.824@0.0.1536.824" timestamp="1596892967442" />
+    <state width="1493" height="261" key="GridCell.Tab.1.right" timestamp="1596892967443">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="261" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1596804624343" />
-    <state x="270" y="57" key="SettingsEditor" timestamp="1596547899518">
+    <state width="1493" height="261" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1596892967443" />
+    <state x="270" y="57" key="SettingsEditor" timestamp="1596537050590">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="270" y="57" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1596547899518" />
-    <state width="775" height="419" key="XDebugger.FullValuePopup" timestamp="1596804240871">
+    <state x="270" y="57" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1596537050590" />
+    <state x="431" y="145" width="672" height="678" key="search.everywhere.popup" timestamp="1596766467331">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="775" height="419" key="XDebugger.FullValuePopup/0.0.1536.824@0.0.1536.824" timestamp="1596804240871" />
-    <state x="431" y="145" width="672" height="678" key="search.everywhere.popup" timestamp="1596533343644">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state x="431" y="145" width="672" height="678" key="search.everywhere.popup/0.0.1536.824@0.0.1536.824" timestamp="1596533343644" />
+    <state x="431" y="145" width="672" height="678" key="search.everywhere.popup/0.0.1536.824@0.0.1536.824" timestamp="1596766467331" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/protocol/writer.go</url>
-          <line>39</line>
-          <option name="timeStamp" value="33" />
+          <url>file://$PROJECT_DIR$/server/srv/tcpserver.go</url>
+          <line>152</line>
+          <option name="timeStamp" value="24" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

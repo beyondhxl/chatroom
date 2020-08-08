@@ -9,10 +9,10 @@ import (
 
 // 实际的 TCPChatClient
 type TTCPChatClient struct {
-	conn    net.Conn             // 实际的网络连接
-	strName string               // 客户端名称
-	tReader *protocol.TCmdReader // 读指令器
-	tWriter *protocol.TCmdWriter // 写指令器
+	conn     net.Conn             // 实际的网络连接
+	strName  string               // 客户端名称
+	ptReader *protocol.TCmdReader // 读指令器
+	ptWriter *protocol.TCmdWriter // 写指令器
 }
 
 // 构造聊天客户端
@@ -26,9 +26,9 @@ func (this *TTCPChatClient) Dial(addr string) error {
 	if err != nil {
 		return err
 	}
-	this.conn = conn                           // 保存客户端连接
-	this.tWriter = protocol.NewCmdWriter(conn) // 构造读写器
-	this.tReader = protocol.NewCmdReader(conn)
+	this.conn = conn                            // 保存客户端连接
+	this.ptWriter = protocol.NewCmdWriter(conn) // 构造读写器
+	this.ptReader = protocol.NewCmdReader(conn)
 	return err
 }
 
@@ -44,7 +44,7 @@ func (this *TTCPChatClient) Start() {
 		// MESSAGE username msg\n
 		// SEND msg\n
 		// NAME username\n
-		this.tWriter.Write(message)
+		this.ptWriter.Write(message)
 
 		/*
 			this.Send(message) // 发送消息
@@ -78,7 +78,7 @@ func (this *TTCPChatClient) recvLoop() {
 			this.conn.Read(data)
 			fmt.Println(string(data))
 		*/
-		msg, _ := this.tReader.Read()
+		msg, _ := this.ptReader.Read()
 		fmt.Println(msg)
 	}
 }
